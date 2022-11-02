@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Регистрация</title>
+{% endblock title %}
+{% block content %}
+    <section class="vh-50 bg-image mt-5 mb-5">
+        <div class="mask d-flex align-items-center gradient-custom-3">
+            <div class="container">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">New account registration</h2>
+
+
+                                <form action="{% url 'register' %}" method="post">
+
+                                    {% if form.errors %}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <div class="alert alert-danger">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        {% for error in form.non_field_errors %}
+                                            <div class="alert alert-danger">
+                                                <strong>{{ error|escape }}</strong>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <div class="form-outline mb-3">
+                                        <label class="form-label" for="id_username">Username</label>
+                                        <input type="text" name="username" class="form-control"
+                                               maxlength="254" required id=id_"username"
+                                               placeholder="Username">
+                                    </div>
+
+                                    <div class="form-outline mb-3">
+                                        <label class="form-label" for="id_first_name">First name</label>
+                                        <input type="text" name="first_name" class="form-control"
+                                               autocomplete="first_name" maxlength="254" required id="id_first_name"
+                                               placeholder="First name">
+                                    </div>
+
+                                    <div class="form-outline mb-3">
+                                        <label class="form-label" for="id_last_name">Last name</label>
+                                        <input type="text" name="last_name" class="form-control"
+                                               placeholder="Last name" maxlength="20"
+                                               required="" id="id_last_name">
+                                    </div>
+
+                                    <div class="form-outline mb-3">
+                                        <label class="form-label" for="id_email">Email</label>
+                                        <input type="email" name="email" class="form-control"
+                                               autocomplete="email" maxlength="254" required id="id_email"
+                                               placeholder="Enter email">
+                                    </div>
+
+                                    <div class="form-outline mb-3">
+                                        <label class="small mb-1" for="password1">Password</label>
+                                        <input type="password" name="password1" autocomplete="password"
+                                               class="form-control" required id="password1"
+                                               placeholder="Enter password"/>
+                                    </div>
+
+                                    <div class="form-outline mb-3">
+                                        <label class="small mb-1" for="password2">Confirm Password</label>
+                                        <input type="password" name="password2" autocomplete="password"
+                                               required id="password2" class="form-control"
+                                               placeholder="Confirm password"/>
+                                    </div>
+
+                                    {% csrf_token %}
+
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" title="Создать аккаунт"
+                                                class="btn btn-success text-center w-100 mt-2">
+                                            New account registration
+                                        </button>
+                                    </div>
+
+                                    <p class="text-center text-muted mt-5 mb-0">Already have an account?<a
+                                            href="{% url 'login' %}"
+                                            class="fw-bold text-body"><u>Sign in to your account</u></a></p>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
