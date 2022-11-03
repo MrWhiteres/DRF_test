@@ -1,6 +1,6 @@
 from django.contrib.admin import register, ModelAdmin
 
-from .models import ImageProduct, Product
+from .models import ProductImage, Product
 
 
 @register(Product)
@@ -9,6 +9,6 @@ class ProductAdmin(ModelAdmin):
 
 
 
-@register(ImageProduct)
+@register(ProductImage)
 class ImageProductAdmin(ModelAdmin):
     list_display = ['product']
