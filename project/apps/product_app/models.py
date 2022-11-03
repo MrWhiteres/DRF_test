@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Model, CharField, DecimalField, ImageField, ForeignKey, CASCADE
+from django.db.models import Model, CharField, DecimalField, ImageField, ForeignKey, CASCADE, DateTimeField
 
 from project.apps.user_app.models import User
 
@@ -15,6 +15,8 @@ class Product(Model):
     title = CharField(max_length=255, verbose_name="Product Title")
     price = DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Product Price')
     owner = ForeignKey(User, on_delete=CASCADE)
+    created_date = DateTimeField(auto_now_add=True)
+    update_date = DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.title)

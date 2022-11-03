@@ -43,7 +43,8 @@ DEFAULT_APPS = [
 
 OTHER_APPS = [
     'rest_framework',
-    'widget_tweaks'
+    'widget_tweaks',
+    'drf_multiple_model'
 ]
 
 LOCAL_APPS = [
@@ -58,11 +59,9 @@ CHANGED_APPS = [
 
 INSTALLED_APPS = CHANGED_APPS + DEFAULT_APPS + LOCAL_APPS + OTHER_APPS
 
-
 AUTH_USER_MODEL = "user_app.User"
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Kiev'
-
+DATETIME_FORMAT = "%Y-%m-%d/%H:%M:%S"
 USE_I18N = True
 
 USE_TZ = True
@@ -154,3 +153,8 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}

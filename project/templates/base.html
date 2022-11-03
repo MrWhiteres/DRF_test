@@ -20,15 +20,17 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="{% url 'base_page' %}" class="btn btn-outline-light me-2">Home</a></li>
                 {% if user.is_superuser %}
+
                 {% endif %}
             </ul>
 
             <div class="text-end">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'logout' %}" class="btn btn-warning">logout</a>
+                <a href="{% url 'logout' %}" class="btn btn-warning">logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
-                    <a href="{% url 'register' %}" class="btn btn-warning">Registration</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-warning">Registration</a>
+
                 {% endif %}
 
             </div>
@@ -36,83 +38,27 @@
     </div>
 </header>
 {% block content %}
-    {% if user.is_authenticated %}
-        {% if user.is_superuser %}
-            <section class="py-5">
-                <div class="container px-4 px-lg-5 mt-5">
-                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                        {% for users in profiles %}
-                            <div class="col-xl-3 col-lg-3 col-md-5 col-sm-8 col-8" style="margin-bottom: 20px;">
-                                <a class="tag-a-custom" href="{% url 'profile' pk=users.id %}"
-                                   style="text-decoration: none;">
-                                    <div class="card h-100">
-                                        {% if users.avatar %}
-                                            <picture>
-                                                <img class="card-img-top"
-                                                     src="{{ users.avatar.url }}"
-                                                     alt=""/>
-                                                {% elif users.avatar_urls %}
-
-                                                <source srcset={{ users.avatar_urls.url }}>
-                                                <img class="card-img-top"
-                                                     src={{ users.avatar_urls }}
-                                                             alt=""/>
-                                            </picture>
-                                        {% else %}
-                                        {% endif %}
-
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">{{ users.user.username }}</li>
-                                            <li class="list-group-item">{{ users.user.first_name }}</li>
-                                            <li class="list-group-item">{{ users.user.last_name }}</li>
-                                        </ul>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+            <div class="col-xl-3 col-lg-3 col-md-5 col-sm-8 col-8" style="margin-bottom: 20px;">
+                <a class="dropdown-item text-center" href='{% url "product_detail" pk=product.id %}' style="text-decoration: none;">
+                    <div class="card h-100">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{ product.title }}</li>
+                            <li class="list-group-item">{{ product.price }}</li>
+                            <li class="list-group-item">{{ product.owner }}</li>
+                        </ul>
                     </div>
-                </div>
-            </section>
-        {% else %}
-            <section class="vh-50 bg-image mt-5 mb-5">
-                <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-                    <div class="container h-40">
-                        <div class="row d-flex justify-content-center align-items-center h-100">
-                            <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-                                <div class="card" style="border-radius: 15px;">
-                                    <div class="card-body p-5">
-
-                                        <h3 class="text-center mb-5" style="margin-top: 3rem;">Only the administrator
-                                            can see the information here</h3>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        {% endif %}
-    {% else %}
-        <section class="vh-50 bg-image mt-5 mb-5">
-            <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-                <div class="container h-40">
-                    <div class="row d-flex justify-content-center align-items-center h-100">
-                        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-                            <div class="card" style="border-radius: 15px;">
-                                <div class="card-body p-5">
-
-                                    <h3 class="text-center mb-5" style="margin-top: 3rem;">You need to register.</h3>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </a>
             </div>
-        </section>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 
-    {% endif %}
+
 {% endblock content %}
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

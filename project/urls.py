@@ -17,13 +17,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
+from .apps.product_app.views import ListProductPageView, ProductDetail, Base, ProductDelete, ProductCreate
+
+router = DefaultRouter()
+router.register('worker', Base)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('auth/', include('project.apps.user_app.urls')),
-    path('', include('project.apps.product_app.urls'))
+    path('', ListProductPageView.as_view(), name='base_page'),
+    path('product/<pk>/', ProductDetail.as_view(), name='product_detail'),
+    path('create/', ProductCreate.as_view(), name='create_page'),
+    # path('product_update/<int:pk>/', ProductView.as_view(), name='upda'),
+    path('product_delete/<pk>/', ProductDelete.as_view(), name='delete_page'),
+    path('', include(router.urls))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -47,7 +47,7 @@ class ProfileView(DetailView):
     """
     model = User
     context_object_name = 'profile'
-    template_name = 'profile.html'
+    template_name = 'product_detail.html'
 
 
 class MyLoginView(LoginView):  # pylint: disable=too-many-ancestors
