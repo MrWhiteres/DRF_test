@@ -6,9 +6,9 @@ from project.apps.user_app.models import User
 
 def path_to_img(instance, filename):
     try:
-        return f"product_img/{instance.product.title}-{ImageProduct.objects.latest('id').id + 1}-{filename[-4:]}"
+        return f"product_img/{instance.product.title}/{instance.product.title}-{instance.product.created_date}-{ProductImage.objects.latest('id').id + 1}-{filename[-4:]}"
     except ObjectDoesNotExist:
-        return f"product_img/{instance.product.title}-1-{filename[-4:]}"
+        return f"product_img/{instance.product.title}/{instance.product.title}-{instance.product.created_date}-1-{filename[-4:]}"
 
 
 class Product(Model):
@@ -22,12 +22,12 @@ class Product(Model):
         return str(self.title)
 
 
-class ImageProduct(Model):
+class ProductImage(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
-    image = ImageField(upload_to=path_to_img)
+    images = ImageField(upload_to=path_to_img)
 
     def __str__(self):
         try:
-            return f'{str(self.product)}-{str({ImageProduct.objects.latest("id").id + 1})}'
+            return f'{str(self.product)}-{str({ProductImage.objects.latest("id").id + 1})}'
         except ObjectDoesNotExist:
             return f'{str(self.product)}-1'

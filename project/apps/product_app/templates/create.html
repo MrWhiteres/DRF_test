@@ -3,31 +3,71 @@
 {% load static %}
 
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        <fieldset>
-            <legend>Image</legend>
-            <div class="form-group ">
-                <label>Image</label>
-                <input name="image" type="file" value="" multiple="multiple"
-                       accept="image/png,image/jpeg, image/img">
+    {% if user.is_authenticated %}
+        <section class="vh-50 bg-image mt-5 mb-5">
+            <div class="mask d-flex align-items-center gradient-custom-3">
+                <div class="container">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body p-5">
+                                    <h2 class="text-center mb-5">Добавление нового продукта</h2>
+                                    <h3 class="text-center mb-5">Товаров на сайте - {{ count_product }}</h3>
+                                    <form action="" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <fieldset>
+                                            <div class="form-group ">
+                                                <label for="" class="form-label mb-2">Фотография(и) продукта</label>
+                                                <input name="uploaded_images" type="file" id="file"
+                                                       accept="image/png,image/jpeg, image/img class="
+                                                       class="form-control mb-3"
+                                                       multiple="multiple"/>
+                                            </div>
+                                        </fieldset>
+                                        <div class="form-group has-error">
+                                            <label>Название продукта</label>
+                                            <input name="title" class="form-control" type="text" value="">
+                                        </div>
+                                        <div class="form-group ">
+                                            <label>Цена продукта</label>
+                                            <input name="price" class="form-control" type="number" value="">
+                                        </div>
+                                        <div type="hidden" class="form-group has-error">
+                                            <select hidden="hidden" class="form-control" name="owner">
+                                                <option type="hidden" value="{{ user.id }}">a@a.com</option>
+                                            </select>
+                                        </div>
+                                        <input type="submit" value="save" class="text-center btn-warning">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </fieldset>
-        <div class="form-group has-error">
-            <label>Product Title</label>
-            <input name="title" class="form-control" type="text" value="">
-            <span class="help-block">This field is required.</span>
-        </div>
-        <div class="form-group ">
-            <label>Product Price</label>
-            <input name="price" class="form-control" type="number" value="">
-        </div>
-        <div type="hidden" class="form-group has-error">
-            <select hidden="hidden" class="form-control" name="owner">
-                <option type="hidden" value="{{ user.id }}">a@a.com</option>
-            </select>
-            <span class="help-block">This field is required.</span>
-        </div>
-        <input type="submit" value="save" class="btn btn-warning">
-    </form>
+        </section>
+    {% else %}
+        <section class="vh-50 bg-image mt-5 mb-5">
+            <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+                <div class="container h-50">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body p-5">
+                                    <h2 class="text-center mb-5">Добавление нового продукта</h2>
+                                    <h3 class="text-center mb-5">Товаров на сайте - {{ count_product }}</h3>
+                                    <h2 class="text-center mb-5">
+                                        Только авторизованный пользователь может добавить товар. перенаправление на
+                                        страницу
+                                        входа.</h2>
+                                    <meta http-equiv="refresh"
+                                          content="3; URL={% url 'login' %}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
 {% endblock content %}

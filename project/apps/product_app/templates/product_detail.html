@@ -12,7 +12,7 @@
                             {% for i in image %}
                                 <picture>
                                     <img class="img-thumbnail"
-                                         src="{{ i.image.url }}"
+                                         src="{{ i.images.url }}"
                                          alt="{{ product.title }}"/>
                                 </picture>
                             {% endfor %}
@@ -20,7 +20,6 @@
                     {% endif %}
                 </div>
             </div>
-        {% render_form serializer %}
             <div class="col-lg-8">
                 <div class="card mb-4">
                     <div class="card-body">
@@ -73,7 +72,7 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="d-flex justify-content-center mb-2">
-                                        <a href="{% url 'base_page' %}worker/{{ product.id }}"
+                                        <a href="{% url 'list_page' %}worker/{{ product.id }}"
                                            class="btn btn-warning">Редактирование</a>
                                     </div>
                                 </div>

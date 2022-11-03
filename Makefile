@@ -1,5 +1,7 @@
 admin:
 	python manage.py createsuperuser
+run:
+	python manage.py runserver 0.0.0.0:8000
 up:
 	docker-compose --env-file .env up -d
 build:
