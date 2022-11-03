@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% load static %}
+
+{% block content %}
+    {% if product %}
+        <section style="background-color: #eee;">
+            <div class="container py-5">
+                <div class="row">
+                    {% if image %}
+                        <div class="col-lg-4">
+                            {% for i in image %}
+                                <picture>
+                                    <img class="img-thumbnail"
+                                         src="{{ i.image.url }}"
+                                         alt="{{ product.title }}"/>
+                                </picture>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% render_form serializer %}
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Название</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ product.title }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Цена:</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ product.price }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Владелец</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ product.owner }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Дата добавления:</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ product.created_date }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Последнее обновление</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ product.update_date }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        {% if user.is_superuser %}
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <a href="{% url 'base_page' %}worker/{{ product.id }}"
+                                           class="btn btn-warning">Редактирование</a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <form action="{% url 'delete_page' pk=product.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Удалить продукт" class="btn btn-warning">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    {% else %}
+        <section class="vh-50 bg-image mt-5 mb-5">
+            <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+                <div class="container h-40">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body p-5">
+                                    <h3 class="text-center mb-5" style="margin-top: 3rem;">Продукт отсутствует или был
+                                        удален, через 3
+                                        секунды вы вернетесь на главную страницу</h3>
+                                    <meta http-equiv="refresh" content="3; URL={% url 'base_page' %}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock content %}
