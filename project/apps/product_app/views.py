@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, DestroyAPIView, RetrieveAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, DestroyAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -59,7 +59,7 @@ class ProductDelete(DestroyAPIView):
         return redirect('product_detail', pk=pk)
 
 
-class ProductCreate(ListCreateAPIView):
+class ProductCreate(CreateAPIView):
     parser_classes = [MultiPartParser, FormParser, FileUploadParser]
     serializer_class = ProductSerializer
     renderer_classes = [TemplateHTMLRenderer]
@@ -77,3 +77,29 @@ class ProductCreate(ListCreateAPIView):
         serializer.is_valid()
         serializer.create(validated_data=serializer.data)
         return Response(status=201)
+
+
+class ProductUpdate(UpdateAPIView):
+    parser_classes = [MultiPartParser, FormParser, FileUploadParser]
+    serializer_class = ProductSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'product_update.html'
+
+    def get_object(self, pk):
+        return Product.objects.get(id=pk) if Product.objects.get(id=pk) else None
+
+    def get(self, request, pk, *args, **kwargs):
+        product = self.get_object(pk=pk)
+        image = ProductImage.objects.filter(product=product.id) if product else None
+        serializer = ProductSerializer(data=request.data)
+        serializer.is_valid()
+        return Response({'serializer': serializer, 'product': product,
+                         'image': image})
+
+    @action(methods=["PUT"], detail=True)
+    def post(self, request,pk, *args, **kwargs):
+        product = self.get_object(pk=pk)
+        serializer = ProductSerializer(data=request.data)
+        serializer.is_valid()
+        serializer.update(instance=product, validated_data=serializer.data)
+        return redirect('product_detail', pk=pk)

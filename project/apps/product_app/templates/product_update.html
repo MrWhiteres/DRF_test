@@ -3,56 +3,50 @@
 {% load static %}
 
 {% block content %}
-    {% if product %}
-        <section style="background-color: #eee;">
-            <div class="container py-5">
-
-                {% if image %}
-                    <div class="row">
-                    <div class="col-lg-4">
-                    <div class="card mb-4">
-                        {% for i in image %}
-                            <div class="card-body text-center">
-                            <picture>
-                                <img class="card-img-top"
-                                     src="{{ i.image.url }}"
-                                     alt="{{ product.title }}"/>
-                            </picture>
-                        {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-                </div>
-                </div>
+    {% if product and user == product.owner or user.is_superuser %}
+        <section style="background-color: #eee; text-align:center;">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="col-lg-8">
                     <div class="card mb-4">
                         <div class="card-body">
+                            <fieldset>
+                                <div class="row">
+                                    <label for="" class="form-label mb-2">Добавление фото продукта</label>
+                                    <input name="uploaded_images" type="file" id="file"
+                                           accept="image/png,image/jpeg, image/img class="
+                                           class="form-control mb-3"
+                                           multiple="multiple"/>
+                                </div>
+                            </fieldset>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <p class="mb-0">Название</p>
+                                    <p class="mb-0">Старое название продукта:</p>
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-3">
                                     <p class="text-muted mb-0">{{ product.title }}</p>
                                 </div>
+                                <div class="col-sm-3">
+                                    <label>Новое название продукта:</label>
+                                    <input name="title" class="form-control" type="text"
+                                           value="{{ product.title }}">
+                                </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <p class="mb-0">Цена:</p>
+                                    <p class="mb-0">Старая цена:</p>
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-3">
                                     <p class="text-muted mb-0">{{ product.price }}</p>
                                 </div>
+                                <div class="col-sm-3">
+                                    <label>Новая цена продукта:</label>
+                                    <input name="price" class="form-control" type="number"
+                                           value="{{ product.price }}">
+                                </div>
                             </div>
                             <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Владелец</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{ product.owner }}</p>
-                                </div>
-                            </div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -76,23 +70,28 @@
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <div class="d-flex justify-content-center mb-2">
-                                            <a href="{% url 'base_page' %}worker/{{ product.id }}"
-                                               class="btn btn-warning">Редактирование</a>
+                                            <input type="submit" value="Сохранить изменения" class="btn btn-warning">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="d-flex justify-content-center mb-2">
-                                            <form action="{% url 'delete_page' pk=product.id %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="submit" value="Удалить продукт" class="btn btn-warning">
-                                            </form>
-                                        </div>
+                                <div class="col-sm-3">
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <a href="{% url 'product_detail' pk=product.id %}"
+                                           class="btn btn-warning">Информация о продукте</a>
                                     </div>
                                 </div>
+                                <div class="col-sm-3">
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <form action="{% url 'delete_page' pk=product.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Удалить продукт"
+                                                   class="btn btn-warning">
+                                        </form>
+                                    </div>
+                                </div>
+                                </div>
                             {% endif %}
-                        </div>
-                    </div>
-                </div>
+            </div>
+            </div>
             </div>
         </section>
     {% else %}
@@ -103,12 +102,10 @@
                         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                             <div class="card" style="border-radius: 15px;">
                                 <div class="card-body p-5">
-
                                     <h3 class="text-center mb-5" style="margin-top: 3rem;">Продукт отсутствует или был
                                         удален, через 3
                                         секунды вы вернетесь на главную страницу</h3>
                                     <meta http-equiv="refresh" content="3; URL={% url 'base_page' %}">
-
                                 </div>
                             </div>
                         </div>

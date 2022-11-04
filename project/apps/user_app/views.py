@@ -34,7 +34,7 @@ class Register(View):
             password = form.cleaned_data.get('password1')
             login_user = authenticate(username=username, password=password)
             login(request, login_user)
-            return redirect('base_page')
+            return redirect('list_page')
         context = {
             'form': form,
         }
