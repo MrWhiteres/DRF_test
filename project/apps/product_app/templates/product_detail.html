@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+
     {% if product %}
         <section style="background-color: #eee;">
             <div class="container py-5">
@@ -20,76 +21,66 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-lg-8">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Название</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">{{ product.title }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Цена:</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">{{ product.price }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Владелец</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">{{ product.owner }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Дата добавления:</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">{{ product.created_date }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Последнее обновление</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">{{ product.update_date }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        {% if user.is_superuser %}
+            <article>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <div class="d-flex justify-content-center mb-2">
-                                        <a href="{% url 'list_page' %}worker/{{ product.id }}"
-                                           class="btn btn-warning">Редактирование</a>
-                                    </div>
+                                    <p class="mb-0">Название</p>
                                 </div>
-                                <div class="col-sm-3">
-                                    <div class="d-flex justify-content-center mb-2">
-                                        <form action="{% url 'delete_page' pk=product.id %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="submit" value="Удалить продукт" class="btn btn-warning">
-                                        </form>
-                                    </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ product.title }}</p>
                                 </div>
                             </div>
-                        {% endif %}
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Цена:</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ product.price }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Владелец</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ product.owner }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Дата добавления:</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ product.created_date }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Последнее обновление</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ product.update_date }}</p>
+                                </div>
+                            </div>
+                            <hr>
+            </article>
+            {% if user.is_superuser or user == product.owner %}
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="d-flex justify-content-center mb-2">
+                            <a href="{% url 'update_page' pk=product.id %}"
+                               class="btn btn-warning">Работа с продуктом</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            </div>
+            {% endif %}
         </section>
     {% else %}
         <section class="vh-50 bg-image mt-5 mb-5">

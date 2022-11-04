@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer, ListField, FileField, ImageField
+from rest_framework.utils import model_meta
 
 from .models import Product, ProductImage
 
@@ -22,14 +23,40 @@ class ProductSerializer(ModelSerializer):
         fields = ["title", 'price', 'created_date', 'update_date', 'owner', 'images', 'uploaded_images']
 
     def create(self, validated_data):
-        uploaded_data = validated_data.pop('uploaded_images')
+        uploaded_data = validated_data.pop('uploaded_images', None)
         new_product = Product.objects.create(**validated_data)
-        for uploaded_item in uploaded_data:
-            modified_data = modify_input_for_multiple_files(new_product.id, uploaded_item)
-            file_serializer = ImageSerializer(data=modified_data)
-            if file_serializer.is_valid():
-                file_serializer.save()
+        if uploaded_data:
+            for uploaded_item in uploaded_data:
+                modified_data = modify_input_for_multiple_files(new_product.id, uploaded_item)
+                file_serializer = ImageSerializer(data=modified_data)
+                if file_serializer.is_valid():
+                    file_serializer.save()
         return new_product
+
+    def update(self, instance, validated_data):
+        info = model_meta.get_field_info(instance)
+        uploaded_data = validated_data.pop('uploaded_images', None)
+        m2m_fields = []
+        for attr, value in validated_data.items():
+            if attr in info.relations and info.relations[attr].to_many:
+                m2m_fields.append((attr, value))
+            else:
+                setattr(instance, attr, value)
+
+        instance.save()
+
+        if uploaded_data:
+            for uploaded_item in uploaded_data:
+                modified_data = modify_input_for_multiple_files(instance.id, uploaded_item)
+                file_serializer = ImageSerializer(data=modified_data)
+                if file_serializer.is_valid():
+                    file_serializer.save()
+
+        for attr, value in m2m_fields:
+            field = getattr(instance, attr)
+            field.set(value)
+
+        return instance
 
 
 def modify_input_for_multiple_files(product, images):

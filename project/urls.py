@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .apps.product_app.views import ListProductPageView, ProductDetail, Base, ProductDelete, ProductCreate
+from .apps.product_app.views import ListProductPageView, ProductDetail, Base, ProductDelete, ProductCreate, ProductUpdate
 
 
 urlpatterns = [
@@ -30,7 +30,7 @@ urlpatterns = [
     path('product/', ListProductPageView.as_view(), name='list_page'),
     path('product/<pk>/', ProductDetail.as_view(), name='product_detail'),
     path('', ProductCreate.as_view(), name='create_page'),
-    # path('product_update/<int:pk>/', ProductView.as_view(), name='upda'),
+    path('product_update/<pk>/', ProductUpdate.as_view(), name='update_page'),
     path('product_delete/<pk>/', ProductDelete.as_view(), name='delete_page'),
 ]
 
