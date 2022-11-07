@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+
     {% if user.is_authenticated %}
         <section class="vh-50 bg-image mt-5 mb-5">
             <div class="mask d-flex align-items-center gradient-custom-3">
@@ -12,13 +13,18 @@
                             <div class="card" style="border-radius: 15px;">
                                 <div class="card-body p-5">
                                     <h2 class="text-center mb-5">Добавление нового продукта</h2>
-                                    <form action="" method="post" enctype="multipart/form-data">
+                                    <div class="alert alert-danger d-none" role="alert"></div>
+                                    <div class="alert alert-success d-none" role="alert"></div>
+                                    <form action='{% url 'product_ajax' %}' method="post" enctype="multipart/form-data"
+                                          id="product_ajax" data-bs-target="#product_ajax">
+{#                                        {{ product_ajax }}#}
                                         {% csrf_token %}
+
                                         <fieldset>
                                             <div class="form-group ">
                                                 <label for="" class="form-label mb-2">Фотография(и) продукта</label>
-                                                <input name="uploaded_images" type="file" id="file"
-                                                       accept="image/png,image/jpeg, image/img class="
+                                                <input name="uploaded_images" type="file" id="uploaded_images"
+                                                       accept="image/png,image/jpeg, image/img"
                                                        class="form-control mb-3"
                                                        multiple="multiple"/>
                                             </div>
@@ -36,7 +42,7 @@
                                                 <option type="hidden" value="{{ user.id }}">a@a.com</option>
                                             </select>
                                         </div>
-                                        <input type="submit" value="save" class="text-center btn-warning">
+                                        <input type="submit" value="save" class="text-center btn-warning" id="product_ajax_sub">
                                     </form>
                                 </div>
                             </div>
@@ -69,3 +75,6 @@
         </section>
     {% endif %}
 {% endblock content %}
+<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+<script src="{% static 'ajax_forms.js' %}"></script>
+
