@@ -18,8 +18,8 @@
             </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="{% url 'list_page' %}" class="btn btn-outline-light me-2">Все продукта</a></li>
-                <li><a href="{% url 'create_page' %}" class="btn btn-outline-light me-2">Добавить продукта</a></li>
+                <li><a href="{% url 'list_page' %}" class="btn btn-outline-light me-2">Все продукты</a></li>
+                <li><a href="{% url 'create_page' %}" class="btn btn-outline-light me-2">Добавить продукт</a></li>
                 {% if user.is_superuser %}
 
                 {% endif %}
@@ -67,6 +67,8 @@
         </div>
     </section>
 {% endblock content %}
+<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+<script src="{% static 'ajax_forms.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
         crossorigin="anonymous"></script>

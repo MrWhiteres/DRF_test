@@ -6,9 +6,9 @@ from project.apps.user_app.models import User
 
 def path_to_img(instance, filename):
     try:
-        return f"product_img/{instance.product.title}/{instance.product.title}-{instance.product.created_date}-{ProductImage.objects.latest('id').id + 1}-{filename[-4:]}"
+        return f"product_img/{instance.product.title}-{instance.product.created_date}/{instance.product.title}-{instance.product.created_date}-{ProductImage.objects.latest('id').id + 1}-{filename[-4:]}"
     except ObjectDoesNotExist:
-        return f"product_img/{instance.product.title}/{instance.product.title}-{instance.product.created_date}-1-{filename[-4:]}"
+        return f"product_img/{instance.product.title}-{instance.product.created_date}/{instance.product.title}-{instance.product.created_date}-1-{filename[-4:]}"
 
 
 class Product(Model):

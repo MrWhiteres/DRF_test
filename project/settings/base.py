@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'project.settings.context_processor.get_context_data'
             ],
         },
     },
@@ -158,4 +159,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         'rest_framework.permissions.IsAuthenticated',
 #     ]
 # }
-APPEND_SLASH=False
+APPEND_SLASH = False
+
+# FILE_UPLOAD_HANDLERS = [
+#     'django.contrib.staticfiles.finders.MemoryFileUploadHandler',
+#     'django.contrib.staticfiles.finders.TemporaryFileUploadHandler',
+# ]

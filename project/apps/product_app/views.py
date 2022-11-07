@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, DestroyAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
@@ -49,6 +50,7 @@ class ProductDetail(RetrieveAPIView):
 
 
 class ProductDelete(DestroyAPIView):
+    serializer_class = ProductSerializer
     def get_object(self, pk):
         return Product.objects.get(id=pk) if Product.objects.get(id=pk) else None
 
@@ -56,7 +58,7 @@ class ProductDelete(DestroyAPIView):
     def post(self, request, pk, *args, **kwargs):
         product = self.get_object(pk)
         product.delete()
-        return redirect('product_detail', pk=pk)
+        return redirect('list_page')
 
 
 class ProductCreate(CreateAPIView):
@@ -97,9 +99,48 @@ class ProductUpdate(UpdateAPIView):
                          'image': image})
 
     @action(methods=["PUT"], detail=True)
-    def post(self, request,pk, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         product = self.get_object(pk=pk)
         serializer = ProductSerializer(data=request.data)
         serializer.is_valid()
         serializer.update(instance=product, validated_data=serializer.data)
         return redirect('product_detail', pk=pk)
+
+
+class CreateProductAjaxView(CreateAPIView):
+    parser_classes = [MultiPartParser, FormParser, FileUploadParser]
+    serializer_class = ProductSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'create.html'
+
+    def get(self, request, *args, **kwargs):
+        count_product = len(Product.objects.all()) if Product.objects.all() else 0
+        serializer = ProductSerializer(data=request.data)
+        serializer.is_valid()
+        return Response({'serializer': serializer, 'count_product': count_product})
+
+    def post(self, request, *args, **kwargs):
+        serializer = ProductSerializer(data=request.data, context={'request': request})
+        serializer.is_valid()
+        if serializer.is_valid():
+            result = serializer.create(validated_data=serializer.data)
+            if result:
+                return JsonResponse(
+                    data={
+                        'status': 201,
+                    },
+                    status=200
+                )
+            return JsonResponse(
+                data={
+                    'status': 400,
+                },
+                status=400
+            )
+        else:
+            return JsonResponse(
+                data={
+                    'status': 400
+                },
+                status=200
+            )

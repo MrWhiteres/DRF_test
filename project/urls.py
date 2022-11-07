@@ -17,10 +17,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 
-from .apps.product_app.views import ListProductPageView, ProductDetail, Base, ProductDelete, ProductCreate, ProductUpdate
-
+from .apps.product_app.views import ListProductPageView, ProductDetail, ProductDelete, ProductCreate, ProductUpdate, \
+    CreateProductAjaxView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,6 +31,7 @@ urlpatterns = [
     path('', ProductCreate.as_view(), name='create_page'),
     path('product_update/<pk>/', ProductUpdate.as_view(), name='update_page'),
     path('product_delete/<pk>/', ProductDelete.as_view(), name='delete_page'),
+    path('product_create/', CreateProductAjaxView.as_view(), name='product_ajax'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
